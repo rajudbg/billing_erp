@@ -32,7 +32,8 @@ import { apiClient } from "../api/client";
 import { getErrorMessage } from "../utils/error";
 
 const defaultCompanyId = 1;
-const defaultCurrencyId = 1;
+// Match seeded INR currency in DB (id = 2)
+const defaultCurrencyId = 2;
 
 const InvoicesPage: React.FC = () => {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
