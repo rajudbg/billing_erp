@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Invoice {{ invoice.invoice_number }}</title>
+</head>
+<body>
+    <p>Dear {{ client.name }},</p>
+
+    <p>
+        Please find attached invoice <strong>{{ invoice.invoice_number }}</strong> from
+        <strong>{{ company.name }}</strong>.
+    </p>
+
+    <p>
+        <strong>Issue date:</strong> {{ invoice.issue_date }}<br>
+        <strong>Due date:</strong> {{ invoice.due_date }}<br>
+        <strong>Total amount:</strong> {{ '%.2f'|format(invoice.total_amount) }}<br>
+        <strong>Amount due:</strong> {{ '%.2f'|format(invoice.amount_due) }}<br>
+    </p>
+
+    <p>
+        If you have any questions, please reply to this email.
+    </p>
+
+    <p>Best regards,<br>{{ company.name }}</p>
+</body>
+</html>
+

@@ -1,0 +1,7 @@
+This directory contains Alembic migration scripts.
+
+To create the initial schema migration, from the backend directory run:
+
+    alembic revision --autogenerate -m "initial schema"
+    alembic upgrade head
+

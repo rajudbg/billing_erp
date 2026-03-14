@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Invoice {{ invoice.invoice_number }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 12px; }
+        .header, .footer { width: 100%; }
+        .header td { vertical-align: top; }
+        .company-name { font-size: 18px; font-weight: bold; }
+        .section-title { font-weight: bold; margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }
+        th { background-color: #f5f5f5; }
+        .text-right { text-align: right; }
+        .no-border { border: none; }
+    </style>
+</head>
+<body>
+    <table class="header">
+        <tr>
+            <td>
+                <div class="company-name">{{ company.name }}</div>
+                {% if company.address_line1 %}{{ company.address_line1 }}<br>{% endif %}
+                {% if company.address_line2 %}{{ company.address_line2 }}<br>{% endif %}
+                {% if company.city or company.state or company.postal_code %}
+                    {{ company.city or '' }} {{ company.state or '' }} {{ company.postal_code or '' }}<br>
+                {% endif %}
+                {% if company.country %}{{ company.country }}<br>{% endif %}
+                {% if company.gst_number %}GST: {{ company.gst_number }}<br>{% endif %}
+                {% if company.email %}Email: {{ company.email }}<br>{% endif %}
+                {% if company.phone %}Phone: {{ company.phone }}<br>{% endif %}
+            </td>
+            <td class="text-right">
+                <h2>INVOICE</h2>
+                <b>Invoice #:</b> {{ invoice.invoice_number }}<br>
+                <b>Issue Date:</b> {{ invoice.issue_date }}<br>
+                <b>Due Date:</b> {{ invoice.due_date }}<br>
+            </td>
+        </tr>
+    </table>
+
+    <div class="section-title">Bill To</div>
+    <p>
+        {{ client.name }}<br>
+        {% if client.address_line1 %}{{ client.address_line1 }}<br>{% endif %}
+        {% if client.address_line2 %}{{ client.address_line2 }}<br>{% endif %}
+        {% if client.city or client.state or client.postal_code %}
+            {{ client.city or '' }} {{ client.state or '' }} {{ client.postal_code or '' }}<br>
+        {% endif %}
+        {% if client.country %}{{ client.country }}<br>{% endif %}
+        {% if client.gst_number %}GST: {{ client.gst_number }}<br>{% endif %}
+        {% if client.billing_email %}Email: {{ client.billing_email }}<br>{% endif %}
+    </p>
+
+    <div class="section-title">Invoice Items</div>
+    <table>
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th class="text-right">Quantity</th>
+                <th class="text-right">Unit Price</th>
+                <th class="text-right">Tax %</th>
+                <th class="text-right">Tax Amount</th>
+                <th class="text-right">Line Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in invoice.items %}
+            <tr>
+                <td>{{ item.description }}</td>
+                <td class="text-right">{{ '%.2f'|format(item.quantity) }}</td>
+                <td class="text-right">{{ '%.2f'|format(item.unit_price) }}</td>
+                <td class="text-right">{{ '%.2f'|format(item.tax_rate_percent) }}</td>
+                <td class="text-right">{{ '%.2f'|format(item.line_tax_amount) }}</td>
+                <td class="text-right">{{ '%.2f'|format(item.line_total) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <table style="margin-top: 20px;">
+        <tr>
+            <td class="no-border" style="width: 60%;">
+                {% if invoice.notes %}
+                    <b>Notes:</b><br>
+                    {{ invoice.notes }}
+                {% endif %}
+            </td>
+            <td class="no-border">
+                <table>
+                    <tr>
+                        <td>Subtotal</td>
+                        <td class="text-right">{{ '%.2f'|format(invoice.subtotal_amount) }}</td>
+                    </tr>
+                    <tr>
+                        <td>GST</td>
+                        <td class="text-right">{{ '%.2f'|format(invoice.tax_amount) }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Total</b></td>
+                        <td class="text-right"><b>{{ '%.2f'|format(invoice.total_amount) }}</b></td>
+                    </tr>
+                    <tr>
+                        <td>Amount Paid</td>
+                        <td class="text-right">{{ '%.2f'|format(invoice.amount_paid) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Amount Due</td>
+                        <td class="text-right">{{ '%.2f'|format(invoice.amount_due) }}</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
+
